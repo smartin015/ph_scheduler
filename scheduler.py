@@ -5,6 +5,7 @@ import random
 from datetime import datetime, timedelta
 from collections import defaultdict
 import json
+import sys
 
 # Convert all time between two datetime values into a set of
 # discrete datetimes marking the potential onset of a class
@@ -22,6 +23,12 @@ def slice_date_range(start_date, end_date):
                 ret.append(candidate)
     return ret
 
+def check_if_all_entries_exists_in_array(entries, array):
+  for entry in entries:
+    if entry != array:
+      return False
+  return True
+
 class Instructor:
     def __init__(self, name, capabilities, availability):
         self.name = name
@@ -34,16 +41,23 @@ class Instructor:
             self.avail += slice_date_range(a,b)
 
 # Load and merge classes & instructor & availabilities data -> create instructors
-# TODO validation warning if an instruction has a capability not on the master list
 with open('instructors.json', 'r') as f:
   instructorData = json.load(f)
 with open('availabilities.json', 'r') as f:
   availabilityData = json.load(f)
 with open('classes.json', 'r') as f:
   classesData = json.load(f)
+  classesNames = classesData.keys()
 instructors = []
 for i in instructorData["instructors"]:
-    instructors.append(Instructor(i["name"], i["capabilities"], availabilityData[i["name"]]))
+    invalid = False
+    for c in i["capabilities"]:
+        if c not in classesNames:
+            invalid = c
+    if invalid == False:
+        instructors.append(Instructor(i["name"], i["capabilities"], availabilityData[i["name"]]))
+    else:
+        sys.exit("ERROR! INVALID INSTRUCTOR CAPABILITIY! " + invalid + " for " + i["name"])
 
 # Get all potential combinations of (instructor, date) and store in dict keyed by class
 potential = defaultdict(list)
