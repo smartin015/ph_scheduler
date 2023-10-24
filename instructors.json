@@ -1,11 +1,11 @@
 {
 	"Scott": {
-		"capabilities": ["CNCPlasma", "CNCRouter"]
+		"capabilities": ["Halloween Party", "Intro to TIG Welding"]
 	},
 	"Nolan": {
-		"capabilities": ["GeneralWood", "CNCPlasma"]
+		"capabilities": ["Intro to Vinyl Cutting"]
 	},
 	"Karen": {
-		"capabilities": ["CNCPlasma", "MetalFlowers"]
+		"capabilities": ["Jewelry Intensive Level 1", "Industrial Sewing: Straight Stitch & Serger w/ Valerie Hildenbrand"]
 	}
 }
