@@ -4,6 +4,7 @@ from enum import Enum
 import random
 from datetime import datetime, timedelta
 from collections import defaultdict
+import json
 
 # Convert all time between two datetime values into a set of
 # discrete datetimes marking the potential onset of a class
@@ -29,30 +30,24 @@ class Instructor:
         for a,b in availability:
             a = datetime.strptime(a, '%Y-%m-%d %H')
             b = datetime.strptime(b, '%Y-%m-%d %H')
-            print(a.isoformat(), b.isoformat())
+            # print(a.isoformat(), b.isoformat())
             self.avail += slice_date_range(a,b)
 
-C = Enum('Class', ['CNCPlasma', 'GeneralWood', 'CNCRouter', 'MetalFlowers'])
-instructors = [Instructor(n, c, a) for n, c, a in [
-    ("Scott", 
-        (C.CNCPlasma, C.CNCRouter), 
-        (("2023-09-22 09", "2023-09-22 18"),
-         ("2023-09-24 09", "2023-09-26 18"),
-        )
-    ),
-    ("Nolan",
-        (C.GeneralWood, C.CNCRouter),
-        (("2023-09-22 09", "2023-09-24 18"),)
-    ),
-    ("Karen",
-        (C.CNCPlasma, C.MetalFlowers),
-        (("2023-09-24 00", "2023-09-26 18"),)
-        )
-    ]]
+# Load and merge classes & instructor & availabilities data -> create instructors
+# TODO validation warning if an instruction has a capability not on the master list
+with open('instructors.json', 'r') as f:
+  instructorData = json.load(f)
+with open('availabilities.json', 'r') as f:
+  availabilityData = json.load(f)
+with open('classes.json', 'r') as f:
+  classesData = json.load(f)
+instructors = []
+for i in instructorData["instructors"]:
+    instructors.append(Instructor(i["name"], i["capabilities"], availabilityData[i["name"]]))
 
 # Get all potential combinations of (instructor, date) and store in dict keyed by class
 potential = defaultdict(list)
-for c in C:
+for c in classesData:
     for i in instructors:
         if c not in i.caps:
             continue
@@ -68,12 +63,11 @@ for k in potential:
 for i in range(5):
     candidate = []
     ci = i
-    for c in list(C):
+    for c in list(classesData):
         if len(potential[c]) == 0:
             continue
         candidate.append((c, *(potential[c][ci % len(potential[c])])))
         ci // len(potential[c])
 
     candidate.sort(key=lambda v: v[2])
-    print([(c[0].name, c[1].name, c[2].isoformat()) for c in candidate])
-    
+    print([(c[0], c[1].name, c[2].isoformat()) for c in candidate])
