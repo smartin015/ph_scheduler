@@ -1,0 +1,16 @@
+{
+	"instructors": [
+		{
+			"name": "Scott",
+			"capabilities": ["CNCPlasma", "CNCRouter"]
+		},
+		{
+			"name": "Nolan",
+			"capabilities": ["GeneralWood", "CNCPlasma"]
+		},
+		{
+			"name": "Karen",
+			"capabilities": ["CNCPlasma", "MetalFlowers"]
+		}
+	]
+}

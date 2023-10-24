@@ -2,6 +2,8 @@ from __future__ import print_function
 
 import datetime
 import os.path
+import json
+import sys
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -57,6 +59,21 @@ def main():
             start = event['start'].get('dateTime', event['start'].get('date'))
             end = event['end'].get('dateTime', event['end'].get('date'))
             print(event['summary'], "from", start, "to", end)
+            
+
+        # TODO bin by event (aka instructor) name
+        output = {}
+        with open('instructors.json', 'r') as f:
+            instructorData = json.load(f)
+        print(instructorData)
+        for i in instructorData:
+            output[i["name"]] = []
+        
+        print(output)
+            
+        # with open("availabilities.json", "w") as f:
+        #     json.dump(data, f, indent=4)
+        # sys.exit("ERROR! INVALID INSTRUCTOR CAPABILITIY! " + invalid + " for " + i["name"])
 
     except HttpError as error:
         print('An error occurred: %s' % error)

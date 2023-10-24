@@ -1,16 +1,11 @@
 {
-	"instructors": [
-		{
-			"name": "Scott",
-			"capabilities": ["CNCPlasma", "CNCRouter"]
-		},
-		{
-			"name": "Nolan",
-			"capabilities": ["GeneralWood", "CNCPlasma"]
-		},
-		{
-			"name": "Karen",
-			"capabilities": ["CNCPlasma", "MetalFlowers"]
-		}
-	]
+	"Scott": {
+		"capabilities": ["CNCPlasma", "CNCRouter"]
+	},
+	"Nolan": {
+		"capabilities": ["GeneralWood", "CNCPlasma"]
+	},
+	"Karen": {
+		"capabilities": ["CNCPlasma", "MetalFlowers"]
+	}
 }
