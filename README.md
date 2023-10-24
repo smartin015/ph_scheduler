@@ -1,7 +1,9 @@
 
-pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib python-dateutil
 
 TODO
 
-- [ ] have quickstart turn Google Calendar info into availabilities.json
-- [ ] add some level of sanity / judgement / values to classes scheduling?
+- [ ] Have scheduler read from two JSONs
+	user and date ranges
+	user and competencies
+- [ ] have quickstart turn Google Calendar info into scheduler-ready files
