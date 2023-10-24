@@ -49,14 +49,13 @@ with open('classes.json', 'r') as f:
   classesData = json.load(f)
   classesNames = classesData.keys()
 instructors = []
-for name in instructorData:
-    i = instructorData[name]
+for i in instructorData["instructors"]:
     invalid = False
     for c in i["capabilities"]:
         if c not in classesNames:
             invalid = c
     if invalid == False:
-        instructors.append(Instructor(name, i["capabilities"], availabilityData[name]))
+        instructors.append(Instructor(i["name"], i["capabilities"], availabilityData[i["name"]]))
     else:
         sys.exit("ERROR! INVALID INSTRUCTOR CAPABILITIY! " + invalid + " for " + i["name"])
 
