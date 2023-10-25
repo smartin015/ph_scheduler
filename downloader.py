@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from datetime import datetime, timedelta
+from collections import defaultdict
 import os.path
 import json
 import sys
@@ -65,18 +66,21 @@ def main():
             
 
         # TODO bin by event (aka instructor) name
-        output = {}
+        output = my_dict = defaultdict(list)
+        for event in events:
+            name = event["summary"]
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            end = event['end'].get('dateTime', event['end'].get('date'))
+            output[name].append([start, end])
+
         with open('instructors.json', 'r') as f:
             instructorData = json.load(f)
         print(instructorData)
         for name in instructorData:
             output[name] = []
-        
-        print(output)
             
-        # with open("availabilities.json", "w") as f:
-        #     json.dump(data, f, indent=4)
-        # sys.exit("ERROR! INVALID INSTRUCTOR CAPABILITIY! " + invalid + " for " + i["name"])
+        with open("availabilities.json", "w") as f:
+            json.dump(output, f, indent=4)
 
     except HttpError as error:
         print('An error occurred: %s' % error)
