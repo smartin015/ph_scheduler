@@ -3,6 +3,7 @@
 from enum import Enum
 import random
 from datetime import datetime, timedelta
+from dateutil.parser import parse
 from collections import defaultdict
 import json
 import sys
@@ -35,8 +36,8 @@ class Instructor:
         self.caps = capabilities
         self.avail = []
         for a,b in availability:
-            a = datetime.strptime(a, '%Y-%m-%d %H')
-            b = datetime.strptime(b, '%Y-%m-%d %H')
+            a = parse(a)
+            b = parse(b)
             # print(a.isoformat(), b.isoformat())
             self.avail += slice_date_range(a,b)
 

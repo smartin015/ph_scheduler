@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from datetime import datetime, timedelta
+from dateutil import parser
 from collections import defaultdict
 import os.path
 import json
@@ -58,19 +59,13 @@ def main():
             print('No upcoming events found.')
             return
 
-        # Prints the start and name of the events
-        for event in events:
-            start = event['start'].get('dateTime', event['start'].get('date'))
-            end = event['end'].get('dateTime', event['end'].get('date'))
-            print(event['summary'], "from", start, "to", end)
-            
-
         # Bin by event (aka instructor) name
         output = my_dict = defaultdict(list)
         for event in events:
             name = event["summary"]
-            start = event['start'].get('dateTime', event['start'].get('date'))
-            end = event['end'].get('dateTime', event['end'].get('date'))
+            start = parser.parse(event['start'].get('dateTime', event['start'].get('date'))).isoformat()
+            end = parser.parse(event['end'].get('dateTime', event['end'].get('date'))).isoformat()
+            print(name, "from", start, "to", end)
             output[name].append([start, end])
             
         with open("availabilities.json", "w") as f:

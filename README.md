@@ -3,7 +3,11 @@ pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-
 
 TODO
 
-- [ ] Have scheduler read from two JSONs
-	user and date ranges
-	user and competencies
-- [ ] have quickstart turn Google Calendar info into scheduler-ready files
+- [ ] test download and schedule flow with real calendar
+- [ ] uploader
+
+v2
+
+- [ ] better scheduling
+	- take into account "to_schedule" count
+	- sanity check class times (e.g. don't start before 7am or after 10pm?)
