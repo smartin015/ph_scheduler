@@ -65,19 +65,13 @@ def main():
             print(event['summary'], "from", start, "to", end)
             
 
-        # TODO bin by event (aka instructor) name
+        # Bin by event (aka instructor) name
         output = my_dict = defaultdict(list)
         for event in events:
             name = event["summary"]
             start = event['start'].get('dateTime', event['start'].get('date'))
             end = event['end'].get('dateTime', event['end'].get('date'))
             output[name].append([start, end])
-
-        with open('instructors.json', 'r') as f:
-            instructorData = json.load(f)
-        print(instructorData)
-        for name in instructorData:
-            output[name] = []
             
         with open("availabilities.json", "w") as f:
             json.dump(output, f, indent=4)
