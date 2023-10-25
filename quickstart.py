@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import datetime
+from datetime import datetime, timedelta
 import os.path
 import json
 import sys
@@ -41,11 +41,14 @@ def main():
         service = build('calendar', 'v3', credentials=creds)
 
         # Call the Calendar API
-        now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
-        # TODO timemax
-        events_result = service.events().list(calendarId='primary', timeMin=now,
-                                              maxResults=100, singleEvents=True,
+        now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+        timeMax = (datetime.utcnow() + timedelta(days=30)).isoformat() + 'Z'  # 'Z' indicates UTC time
+        print('Getting upcoming events')
+        events_result = service.events().list(calendarId='primary',
+                                              timeMin=now,
+                                              timeMax=timeMax,
+                                              maxResults=100,
+                                              singleEvents=True,
                                               orderBy='startTime').execute()
         events = events_result.get('items', [])
         print(events)
@@ -54,7 +57,7 @@ def main():
             print('No upcoming events found.')
             return
 
-        # Prints the start and name of the next 10 events
+        # Prints the start and name of the events
         for event in events:
             start = event['start'].get('dateTime', event['start'].get('date'))
             end = event['end'].get('dateTime', event['end'].get('date'))
@@ -66,8 +69,8 @@ def main():
         with open('instructors.json', 'r') as f:
             instructorData = json.load(f)
         print(instructorData)
-        for i in instructorData:
-            output[i["name"]] = []
+        for name in instructorData:
+            output[name] = []
         
         print(output)
             
