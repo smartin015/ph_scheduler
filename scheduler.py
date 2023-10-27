@@ -1,10 +1,8 @@
-# Brute-force schedule creation 
-
 from enum import Enum
-import random
 from datetime import datetime, timedelta
 from dateutil.parser import parse
 from collections import defaultdict
+import random
 import json
 import sys
 
