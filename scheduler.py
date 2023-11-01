@@ -1,9 +1,8 @@
-# Brute-force schedule creation 
-
 from enum import Enum
-import random
 from datetime import datetime, timedelta
+from dateutil.parser import parse
 from collections import defaultdict
+import random
 import json
 import sys
 
@@ -35,8 +34,8 @@ class Instructor:
         self.caps = capabilities
         self.avail = []
         for a,b in availability:
-            a = datetime.strptime(a, '%Y-%m-%d %H')
-            b = datetime.strptime(b, '%Y-%m-%d %H')
+            a = parse(a)
+            b = parse(b)
             # print(a.isoformat(), b.isoformat())
             self.avail += slice_date_range(a,b)
 
@@ -74,15 +73,23 @@ for c in classesData:
 for k in potential:
     random.shuffle(potential[k])
 
-# Construct candidate schedules, using i to try all permutations of <class, instructor, date>
-for i in range(5):
-    candidate = []
-    ci = i
-    for c in list(classesData):
-        if len(potential[c]) == 0:
-            continue
-        candidate.append((c, *(potential[c][ci % len(potential[c])])))
-        ci // len(potential[c])
+# Generate the schedule
+schedule = []
+for c in list(classesData):
+    if len(potential[c]) == 0:
+        continue
+    schedule.append((c, *(potential[c][1 % len(potential[c])])))
+    1 // len(potential[c])
+schedule.sort(key=lambda v: v[2])
 
-    candidate.sort(key=lambda v: v[2])
-    print([(c[0], c[1].name, c[2].isoformat()) for c in candidate])
+# Write to disk
+output = []
+for c in schedule:
+    output.append({
+        'name': c[0], 
+        'description': classesData[c[0]]['description'],
+        'instructor': c[1].name, 
+        'time': c[2].isoformat()
+    })
+with open("schedule.json", "w") as f:
+    json.dump({'schedule': output}, f, indent=4)

@@ -77,3 +77,12 @@ body = {
 # Exclude "archived" events that aren't actively shown.
 eventData = postPaginatedData("/events/search", "searchResults", headers, body)
 print(eventData)
+
+dedupedNamesAndDescriptions = {}
+for e in eventData[0]:
+    dedupedNamesAndDescriptions[e["Event Name"]] = {
+        "description": e["Event Summary"],
+        "to_schedule": 0,
+    }
+with open("existing_classes.json", "w") as f:
+    json.dump(dedupedNamesAndDescriptions, f, indent=4)
